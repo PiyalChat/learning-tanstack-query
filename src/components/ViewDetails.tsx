@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { getPostById, getUserById } from "../Api";
 
 type Props = { postId: number };
