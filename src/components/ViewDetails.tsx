@@ -12,17 +12,26 @@ const ViewDetails = (props: Props) => {
   const apiQuery = useQuery({
     queryKey: ["api", postQuery.data?.userId],
     enabled:
-      postQuery?.data?.userId != null || postQuery?.data?.userId != undefined,
+      typeof postQuery.data !== "object" ||
+      postQuery?.data?.userId != null ||
+      postQuery?.data?.userId != undefined,
     queryFn: () => getUserById(postQuery?.data?.userId),
   });
 
   if (postQuery.isLoading || apiQuery.isLoading) return <h1>Loading...</h1>;
-  else if (postQuery.isError || apiQuery.isError)
-    return <h1>{JSON.stringify(postQuery.error)}</h1>;
+  else if (
+    postQuery.data?.code ||
+    postQuery.isError ||
+    apiQuery.isError
+  )
+    return <h1>{`${JSON.stringify(apiQuery.error)} ${JSON.stringify(postQuery.error)}`}</h1>;
   return (
     <div>
       <div>
-        <div key={postQuery.data?.id}>{postQuery.data?.title}</div>
+        <div key={postQuery.data?.id}>
+          <p>{postQuery.data?.title}</p>
+          <summary>{postQuery.data?.body}</summary>
+        </div>
       </div>
       <br />
       <br />
